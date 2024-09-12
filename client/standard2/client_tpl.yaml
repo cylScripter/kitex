@@ -1,0 +1,20 @@
+path: ./{{ .ServiceName}}/{{ .ServiceName}}/rpc.go
+update_behavior:
+  type: cover
+body: |-
+  package {{ToLower .ServiceName}}
+  import (
+      "context"
+      "{{.ImportPath}}"
+      "github.com/cloudwego/kitex/client"
+    
+  )
+  
+  {{range .AllMethods}}
+   
+   func  {{.Name}}(ctx context.Context ,{{range .Args}} {{.RawName}} {{.Type}}{{end}}, callOptions ...client.Option ) ({{if not .Void}}resp {{.Resp.Type}}, {{end}}err error) {
+  clients := MustNewClient("{{ToLower .ServiceName}}",callOptions...)
+  return clients.{{.Name}}(ctx, {{range .Args}} {{.RawName}} {{end}} )
+  }
+   
+  {{end}}

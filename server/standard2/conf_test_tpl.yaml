@@ -1,0 +1,23 @@
+path: conf/test/conf.yaml
+update_behavior:
+  type: skip
+body: |-
+  service:
+    ServiceName: "{{.RealServiceName}}"
+    Address: ":8888"
+    ToolVersion: 'v0.10.3'
+
+  registry:
+    RegistryAddress:
+      - localhost:2379
+    Username: ""
+    Password: ""
+
+  mysql:
+    dsn: "gorm:gorm@tcp(127.0.0.1:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Local"
+  
+  redis:
+    address: "127.0.0.1:6379"
+    username: ""
+    password: ""
+    db: 0

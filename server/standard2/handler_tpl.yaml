@@ -1,0 +1,32 @@
+path: impl/handler.go
+update_behavior:
+  type: skip
+body: |-
+  package impl
+
+    import (
+      "context"
+
+    	{{- range $path, $aliases := ( FilterImports .Imports .Methods )}}
+    		{{- if not $aliases }}
+    			"{{$path}}"
+          {{- else if or (eq $path "github.com/cloudwego/kitex/client") (eq $path "github.com/cloudwego/kitex/pkg/serviceinfo")}}
+    		{{- else}}
+    			{{- range $alias, $is := $aliases}}
+    				{{$alias}} "{{$path}}"
+    			{{- end}}
+    		{{- end}}
+    	{{- end}}
+    )
+  
+  // {{.ServiceName}}Impl implements the last service interface defined in the IDL.
+   type {{.ServiceName}}Impl struct{}
+  
+  {{range .AllMethods}}
+
+   // {{.Name}} implements the {{.ServiceName}}Impl interface.
+  func (s *{{$.ServiceName}}Impl) {{.Name}}(ctx context.Context {{range .Args}}, {{LowerFirst .Name}} {{.Type}}{{end}} ) ( {{.Resp.Type}}, error) {
+    var resp {{.Resp.Type}}
+    return &resp, nil
+  }
+  {{end}}
