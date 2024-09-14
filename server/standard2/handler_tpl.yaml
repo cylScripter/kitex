@@ -26,7 +26,7 @@ body: |-
 
    // {{.Name}} implements the {{.ServiceName}}Impl interface.
   func (s *{{$.ServiceName}}Impl) {{.Name}}(ctx context.Context {{range .Args}}, {{LowerFirst .Name}} {{.Type}}{{end}} ) ( {{.Resp.Type}}, error) {
-    var resp {{.Resp.Type}}
+    var resp {{ReplaceString .Resp.Type "*" "" -1  }}
     return &resp, nil
   }
   {{end}}
